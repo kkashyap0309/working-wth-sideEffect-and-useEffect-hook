@@ -16,10 +16,11 @@ const storedPlaces = storageDataIds.map((id) =>
 );
 
 function App() {
-  const modal = useRef();
   const selectedPlace = useRef();
   const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
   const [availablePlaces, setAvailablePlaces] = useState([]);
+  //using useState hook to set modal state 
+  const[modalIsOpen, setModalIsOpen] = useState(false);
 
   //Here we are using the using useEffect in order to handle the infiniteloop and getting the geolocation position
   // is async process it may or maynot be available with same execution time and could be available in future
@@ -37,12 +38,12 @@ function App() {
   }, []);
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setModalIsOpen(true);
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+       setModalIsOpen(false);
   }
 
   function handleSelectPlace(id) {
@@ -71,7 +72,7 @@ function App() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
+    setModalIsOpen(false);
 
     //fetching data from browserstorage if available
     const storageDataIds =
@@ -87,7 +88,7 @@ function App() {
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal showModal={modalIsOpen} onclosing={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}

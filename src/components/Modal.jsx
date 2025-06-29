@@ -1,26 +1,23 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
-const Modal = forwardRef(function Modal({ children }, ref) {
+const Modal = function Modal({ children, showModal, onclosing }) {
   const dialog = useRef();
-
-  useImperativeHandle(ref, () => {
-    return {
-      open: () => {
-        dialog.current.showModal();
-      },
-      close: () => {
-        dialog.current.close();
-      },
-    };
-  });
+    
+  useEffect(() => {
+    if (showModal) {
+      dialog.current.showModal();
+    } else {
+      dialog.current.close();
+    }
+  }, [showModal]);
 
   return createPortal(
-    <dialog className="modal" ref={dialog}>
+    <dialog className="modal" ref={dialog} onClose={onclosing}>
       {children}
     </dialog>,
-    document.getElementById('modal')
+    document.getElementById("modal")
   );
-});
+};
 
 export default Modal;
