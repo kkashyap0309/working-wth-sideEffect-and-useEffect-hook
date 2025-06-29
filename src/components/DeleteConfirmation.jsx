@@ -1,26 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import ProgressBar from "./ProgressBar";
 
-const TIMER = 3000;
+const TIMER = 5000;
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
-  //adding progress bar
-  const [progressTimerRemaining, setProgressTimerRemaining] = useState(TIMER);
-
-  useEffect(() => {
-    // this timer will keep on going since there is no cleanup code to remove timer when this component disappears
-    //hence to handle this sideEffect we need to use useEffect hook
-    const interval = setInterval(() => {
-      console.log("interval");
-      
-      setProgressTimerRemaining((prevTiming) => prevTiming - 10);
-    }, 10);
-
-    return () =>{
-      console.log("clear interval");
-      
-      clearInterval(interval);
-    }
-  }, []);
-
   // I want feature to default delete the place if modal is remained open.
 
   //This timer will run when this component will be rendered since the modal will be rendered in the same flow
@@ -54,7 +36,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
           Yes
         </button>
       </div>
-      <progress value={progressTimerRemaining} max={TIMER} />
+     <ProgressBar timer={TIMER}/>
     </div>
   );
 }
